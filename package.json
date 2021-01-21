@@ -1,0 +1,45 @@
+{
+  "name": "howzit-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve index.html",
+    "build": "parcel build index.html",
+    "lint": "standard --fix | snazzy"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
+    "font-awesome": "^4.7.0",
+    "parcel-bundler": "^1.12.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "sass-loader": "^10.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "babel-loader": "^8.2.2",
+    "core-js": "^3.8.1",
+    "sass": "^1.26.3",
+    "snazzy": "^8.0.0",
+    "standard": "^14.3.1"
+  },
+  "standard": {
+    "ignore": [
+      "tmp",
+      "node_modules",
+      "dist",
+      ".cache"
+    ],
+    "globals": [
+      "localStorage",
+      "location"
+    ]
+  }
+}

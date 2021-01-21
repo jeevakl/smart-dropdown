@@ -1,0 +1,32 @@
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+$fa-font-path:"../../node_modules/font-awesome/fonts";
+@import "node_modules/font-awesome/scss/font-awesome";
+
+html, body {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dropdown {
+  position: relative;
+
+  .input-group-append {
+    cursor: pointer;
+  }
+
+  .dropdown-items {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow: auto;
+
+    .list-group-item {
+      cursor: pointer;
+    }
+  }
+}
