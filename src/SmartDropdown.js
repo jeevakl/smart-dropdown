@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 export function SmartDropdown (props) {
-  const { fetch, formatter, filter, onSelect, limit, canAdd, onAdd } = props
+  const { fetch, formatter, filter, onSelect, limit, canAdd, add } = props
 
   const [items, setItems] = useState([])
   const [search, setSearch] = useState('')
@@ -35,7 +35,7 @@ export function SmartDropdown (props) {
   }
 
   const onItemAdd = () => {
-    onAdd(searchInput.current.value.trim())
+    add(searchInput.current.value.trim())
       .then(item => {
         items.push(item)
         setItems(items)

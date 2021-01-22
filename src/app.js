@@ -51,7 +51,7 @@ export function App () {
             onSelect={onCountrySelect}
             limit={3}
             canAdd={isAdmin}
-            onAdd={addCountry}
+            add={addCountry}
           />
           {
             selectedCountry &&
