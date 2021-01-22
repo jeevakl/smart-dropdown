@@ -1,26 +1,11 @@
 import React, { useState } from 'react'
-import { api } from './api'
+import { addCountry, api, fetchCountries } from './api'
 import './scss/app.scss'
 import { SmartDropdown } from './SmartDropdown'
 
 export function App () {
   const [isAdmin, setIsAdmin] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState(null)
-
-  const fetchCountries = () => {
-    return api.get('/listcountries')
-      .then(response => {
-        return response.data || []
-      })
-  }
-
-  const addCountry = (name) => {
-    return api.post('/add', {
-      name
-    }).then(response => {
-      return response.data
-    })
-  }
 
   const onCountrySelect = (country) => {
     setSelectedCountry(country)

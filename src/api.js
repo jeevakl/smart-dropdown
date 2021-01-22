@@ -19,3 +19,18 @@ export const api = Axios.create(
     ]
   }
 )
+
+export const fetchCountries = () => {
+  return api.get('/listcountries')
+    .then(response => {
+      return response.data || []
+    })
+}
+
+export const addCountry = (name) => {
+  return api.post('/add', {
+    name
+  }).then(response => {
+    return response.data
+  })
+}
