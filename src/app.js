@@ -1,49 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { api } from './api'
 import './scss/app.scss'
 import { SmartDropdown } from './SmartDropdown'
 
 export function App () {
   const [isAdmin, setIsAdmin] = useState(false)
-  const [countriesRepo, setCountriesRepo] = useState([])
-  const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState(null)
 
   const fetchCountries = () => {
-    api.get('/listcountries')
+    return api.get('/listcountries')
       .then(response => {
-        if (response.data) {
-          setCountriesRepo(response.data)
-          setCountries(response.data)
-        }
+        return response.data || []
       })
   }
 
   const addCountry = (name) => {
-    api.post('/add', {
+    return api.post('/add', {
       name
     }).then(response => {
-      if (response.data) {
-        setSelectedCountry(response.data)
-        countriesRepo.push(response.data)
-        setCountriesRepo(countriesRepo)
-        setCountries([response.data])
-      }
+      return response.data
     })
-  }
-
-  useEffect(() => {
-    fetchCountries()
-  }, [])
-
-  const onCountrySearch = (value) => {
-    value = value.trim()
-    if (value) {
-      const filteredCountries = countriesRepo.filter(country => country.name.search(new RegExp(value, 'ig')) > -1)
-      setCountries(filteredCountries)
-    } else {
-      setCountries(countriesRepo)
-    }
   }
 
   const onCountrySelect = (country) => {
@@ -84,8 +60,9 @@ export function App () {
         </div>
         <div className='col-md-9'>
           <SmartDropdown
-            items={countries}
-            onSearch={onCountrySearch}
+            fetch={fetchCountries}
+            formatter={country => country.name}
+            filter={(country, search) => country.name.search(new RegExp(search, 'ig')) > -1}
             onSelect={onCountrySelect}
             limit={3}
             canAdd={isAdmin}

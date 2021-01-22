@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 export function SmartDropdown (props) {
-  const { items, onSearch, onSelect, limit, canAdd, onAdd } = props
+  const { fetch, formatter, filter, onSelect, limit, canAdd, onAdd } = props
 
+  const [items, setItems] = useState([])
+  const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [itemsLimit, setItemsLimit] = useState(limit || 2)
 
@@ -19,7 +21,12 @@ export function SmartDropdown (props) {
   }
 
   const onSearchInputChange = () => {
-    onSearch(searchInput.current.value.trim())
+    const search = searchInput.current.value.trim()
+    setSearch(search)
+  }
+
+  const getFilteredItems = () => {
+    return search ? items.filter(item => filter(item, search)) : items
   }
 
   const onItemSelect = (item) => {
@@ -29,8 +36,17 @@ export function SmartDropdown (props) {
 
   const onItemAdd = () => {
     onAdd(searchInput.current.value.trim())
-    close()
+      .then(item => {
+        items.push(item)
+        setItems(items)
+        onItemSelect(item)
+      })
   }
+
+  useEffect(() => {
+    fetch()
+      .then(setItems)
+  }, [])
 
   useEffect(() => {
     const closeListener = () => {
@@ -41,6 +57,8 @@ export function SmartDropdown (props) {
       window.removeEventListener('click', closeListener, false)
     }
   }, [])
+
+  const filteredItems = getFilteredItems()
 
   return (
     <div
@@ -63,30 +81,30 @@ export function SmartDropdown (props) {
       {
         isOpen &&
           <ul className='dropdown-items list-group'>
-            {items &&
-              items.length > 0 &&
-              items.slice(0, itemsLimit).map((item, index) =>
+            {filteredItems &&
+              filteredItems.length > 0 &&
+              filteredItems.slice(0, itemsLimit).map((item, index) =>
                 <li
                   key={index}
                   className='list-group-item'
                   onClick={() => { onItemSelect(item) }}
                 >
-                  {item.name}
+                  {formatter(item)}
                 </li>
               )}
-            {items.length > itemsLimit &&
+            {filteredItems.length > itemsLimit &&
               <li
                 className='list-group-item text-primary'
-                onClick={() => { setItemsLimit(items.length) }}
+                onClick={() => { setItemsLimit(filteredItems.length) }}
               >
-                {items.length - itemsLimit} more...
+                {filteredItems.length - itemsLimit} more...
               </li>}
-            {(!items.length || !items) &&
+            {(!filteredItems.length || !filteredItems) &&
               <li className='list-group-item'>
                 <div className='d-flex justify-content-between align-items-center'>
-                  <span className='text-danger'>{searchInput.current.value} not found.</span>
+                  <span className='text-danger'>{search} not found.</span>
                   {
-                    searchInput.current.value.trim() && canAdd &&
+                    search && canAdd &&
                       <button
                         className='btn btn-primary'
                         onClick={onItemAdd}
